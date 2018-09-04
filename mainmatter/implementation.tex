@@ -15,7 +15,8 @@
 \section{Development}%
 \label{sec:development}
 
-The code for this thesis was written in Numpy, Scipy, and Tensorflow.
+The code for this thesis was written in Numpy, Scipy, and Tensorflow, and
+is implemented as a Python package named \ttt{torsk}.
 Tensorflow [\cite{tensorflow2016}] is the most commonly used framework for
 implementing ML models. It is an open source library that is maintained mostly
 by Google engineers. In addition to implementing the most common GD algorithms,
@@ -36,6 +37,23 @@ versions 1.6-1.9.
 
 \subsection{The Journey}%
 \label{sub:the_journey}
+The implementation of the algorithm that was described theoretically in the
+previous chapters is the result of a search for a suitable RNN architecture and
+training method that has required numerous trial and error attempts.  The
+result is a carefully orchestrated model that allows the prediction of
+high-dimensional, spatio-temporal, chaotic systems. Although it should be quite
+straight forward to implement a functioning ESN, with the theoretical
+background that was laid in the two previous chapters, the model is quite
+easy to break. Slightly defective training procedures can lead to the
+reproduction of the current time frame instead of a prediction of the future.
+Once the network is correctly implemented, it still is not trivial to make it
+produce sensible predictions for different datasets due to the large number of
+hyper-parameters that have to be set.  Erroneous hyper-parameter setups easily
+result in predictions that quickly diverge, or do nothing but decay to the mean
+value of the input sequence.  Especially the last error is very hard to fix
+without a good intuition of the internal dynamics of the ESN.  Tensorflow's
+rather opaque RNN programming model does its part in slowing down the
+resolution of these problems.
 
 At the beginning of this thesis it was not yet clear that the final approach
 would involve reservoir computing, which does not need to make use of the very
@@ -53,28 +71,10 @@ than Tensorflow, but this claim was not veryfied personally. That being said,
 PyTorch is still in an even earlier stage of development than Tensorflow, and
 was not as popular in the beginning of this work.\\
 
-The implementation of the algorithm that was described theoretically in the
-previous chapters is the result of a search for a suitable architecture and
-training method that has required numerous trial and error attempts.  The
-result is a carefully orchestrated model that allows the prediction of
-high-dimensional, spatio-temporal, chaotic systems. Although it should be quite
-straight forward to implement a functioning ESN, with the theoretical
-background that was laid in the three previous chapters, the model is quite
-easy to break.  Slightly defective training procedures can lead to the
-reproduction of the current time frame instead of a prediction of the future.
-Once the network is correctly implemented, it still is not trivial to make it
-produce sensible predictions for different datasets due to the large number of
-hyper-parameters that have to be set.  Erroneous hyper-parameter setups easily
-result in predictions that quickly diverge, or do nothing but decay to the mean
-value of the input sequence.  Especially the last error is very hard to fix
-without a good intuition of the internal dynamics of the ESN.  Tensorflow's
-rather opaque RNN programming model does its part in slowing down the
-resolution of these problems.
 
 
-
-\section{The \texttt{torsk} Module}%
-\label{sec:overview}
+\section{The \texttt{torsk} Python Package}%
+\label{sec:torsk}
 
 The code that was developed in this work can be found on GitHub
 [\cite{coderepo}], code snippets that are presented here are partially simplified
@@ -92,24 +92,25 @@ submodules to inspect the output of the Tensorflow models.
 \begin{figure}
   \centering
   \includegraphics[width=0.5\linewidth]{tikz/flow.pdf}
-  \caption{Flow chart of the algorithm}
+  \caption{Flow chart of the execution of \texttt{torsk} as it is realized with
+  its run scripts.}
   \label{fig:flowchart}
 \end{figure}
 
-Fig.~\ref{fig:flowchart} shows a flow chart of the whole detection algorithm,
-to provide an overview over how it works.  To realize the anomaly detection in
-Tensorflow, it is broken down into three phases: First, the build phase, where
-the computational graph is constructed. Second, the execution phase, which
-evaluates the graph in an appropriate order to optimize the ESN and make
-predictions. And third, the visualization of the results.  If an online
-learning model (powered by GD algorithms) is ran, then the execution and
-visualization phases can also be unified.
+Fig.~\ref{fig:flowchart} shows a flow chart of the anomaly detection
+execution, to provide an overview over how it works.  To realize the
+anomaly detection in Tensorflow, it is broken down into three phases: First,
+the build phase, where the computational graph is constructed. Second, the
+execution phase, which evaluates the graph in an appropriate order to optimize
+the ESN and make predictions. And third, the visualization of the results.  If
+an online learning model (powered by GD algorithms) is run, then the execution
+and visualization phases can also be unified.
 
-Once the graph is constructed it is, thanks to Tensorflow, almost trivial to
-pick out the operations that are desired and evaluate them. As the execution
-and visualization phases of the algorithm are rather straight forward and can
-be examined more closely in the examples of the \ttt{torsk} repo, the rest of
-this section will focus on the build phase of the network. 
+Once the graph is constructed it is, almost trivial to pick out the operations
+that are desired and evaluate them using Tensorflow primitives. As the
+execution and visualization phases of the algorithm are rather straight forward
+and can be examined more closely in the examples of the \ttt{torsk} repo, the
+rest of this section will focus on the build phase of the network. 
 
 
 \section{Building the Computational Graph}%
@@ -132,9 +133,8 @@ denoted by $\vt{u}$ (analogous for $\mathbf{y}$ and $\mathbf{d}$).
   \caption{Network graph as created by TensorBoard. The nodes represent the
   tensors that hold the actual values of input frames, weight matrices, etc.
   The edges represent the operations, such as multiplications/additions, which
-  specify the data flow through the graph. The execution of the specified
-  operations is taken care of by Tensorflow. We only need to worry about how
-  connect them in a meaningful way.}
+  specify the data flow through the graph. The specified operations are evaluated
+  during the execution phase of the network within a \ttt{tf.Session}.}
   \label{fig:network_graph}
 \end{figure}
 
@@ -217,13 +217,13 @@ be used in conjunction with the Estimator API.
 
 \begin{listing}
   \inputminted{py}{pseudocode/esn_cell.py}
-  \caption{Pseudo code for the densely represented ESN cell. The full implementation
-  is located at \ttt{torsk.esn.esn\_cell}.}
+  \caption{Pseudo code for the densely represented ESN cell. The full
+  implementation is located at \ttt{torsk.esn.esn\_cell}.}
   \label{lst:esn_cell}
 \end{listing}
 
 The central part of the anomaly detection algorithm is the ESN cell, as
-governed by the state space equations, which where introduced in
+governed by the state space equations, which were introduced in
 Sec.~\ref{ssub:state_space_model}. It is implemented both in a dense
 representation in the \ttt{ESNCell} and a sparse respresentation in the
 \ttt{SparseESNCell}.  To create an RNN in Tensoflow's computational graph, it
@@ -235,7 +235,7 @@ work.  The ESN cell is implemented as a subclass of the
 to make them act like proper \ttt{tf.Layer} objects.  An RNNCell needs to
 implement the \ttt{state\_size} and \ttt{output\_size} properties, as well as a
 \ttt{build} and a \ttt{call} method.  The build method initializes all the
-weights that are needed in the call method, which defines the operations are
+weights that are needed in the call method, which defines the operations that are
 executed at each time step of the RNN.  In most Tensorflow RNN cells the output
 weights are defined outside the cell class as they are not part of the
 recurrency. The reasons for including them, as well as the state variable that
@@ -285,7 +285,7 @@ that includes creating a custom \emph{helper}, which, at the time of writing,
 are rather sparsely documented.  However, it can be done as shown in
 Lst.~\ref{lst:decoder}. The \ttt{prediction\_helper} function defines three
 functions that are needed to create a custom helper, which define the behaviour
-of the helper during the unroll of the ESN.  Custom helpers quite some
+of the helper during the unroll of the ESN.  Custom helpers provide quite some
 flexibility, including sampling next inputs from either labels (desired
 outputs) or predicted outputs, but this is not needed here, so \ttt{sample\_fn}
 just returns an arbitrary value.  The \ttt{next\_inputs\_fn} function is called
@@ -319,13 +319,13 @@ with Tensorflows gradient optimizers.\\
 The anomaly detection, meaning the calculation of the anomaly score, can either
 be done online within the network graph, or offline by reading execution
 summaries and processing them. The former needs to be implemented in Tensorflow
-and is found in \ttt{torsk.score.tfscore}. The latter can be done in Numpy
+and is found in \ttt{torsk.score.tfscore}. The latter was done in Numpy, and
 resides in \ttt{torsk.score.npscore}.  It is a simple function that receives
 the prediction errors and a \ttt{large\_window\_size} and a
 \ttt{small\_window\_size}, from which the normality score can be calculated
 according to Eq.~\ref{eq:normality_score}.
 
-If the anomaly detection is to be done in an online fashion, it needs to be
+If the anomaly detection is to be performed online, it needs to be
 included into Tensorflow's computational graph.  The anomaly score is based on
 a sliding error window, so we need a loop. To prevent a redundant addition of
 operations to the graph Tensorflow provides the \ttt{tf.while\_loop} function
@@ -349,7 +349,7 @@ over the whole loop.
 \label{sec:impl_hyper_parameter_optimization}
 
 The choice of Hyper-parameters of a NN can either be done manually or with a
-number of different HP optimization algorithms (is it not a part of a node in
+number of different HP optimization algorithms (it is not a part of a node in
 \ref{fig:network_graph}). The most commonly used approach is probably Bayesian
 Optimization (as described in Sec.~\ref{sub:bayesian_optimization}).  The
 package `scikit-optimize' provides a convenient implementation, whose usage is

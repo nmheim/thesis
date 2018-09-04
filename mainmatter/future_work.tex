@@ -10,33 +10,30 @@
 \label{sec:conclusions}
 
 After a considerable amount of thought was put into the understanding of the
-dynamical nature and ESN and recurrent neural networks in general we
+dynamical nature of ESNs and recurrent neural networks in general I
 successfully implemented a framework that is able to predict high-dimensional,
-spatio-temporal, chaotic time series.  By solving the prediction problem we
-have in turn managed to create a fairly general anomaly detection algorithm for
-said chaotic systems, without assuming anything about their internal physical
-nature.  The results of sections \ref{sec:res_mackey_glass_system} and
-\ref{sec:res_kuroshio} show the algorithm in action on simulated data.
-Anomalies in the Mackey-Glass system as well as in climate model output have
-been successfully detected.  The only thing that has to be adjusted from one
-dataset to the next are a few hyper-parameters, which can be found via Bayesian
-Optimization.  However, if this is infeasible, they can also be set
-approximately by hand by reasoning about the specific requirements of the given
-problem.  Both the state size and the spectral radius of the ESN can be chosen
-within narrow bounds by examining the requirements of the problem. The state
-size should be at least as large as the period of the examined sequence and the
-spectral radius must be large enough to capture its non-linearity.  However, to
-achieve the best results the exact choices of hyper-parameters are best left to
-algorithms such as Bayesian Optimization.  This reduces the amount of tweaking
-that has to be done to apply the model to new datasets to a minimum.  In
-addition, the application of the ESN to the prediction problem has lead to a
-very cost efficient search algorithm.
+spatio-temporal, chaotic time series.  It can therefore be concluded, that a
+general, automated anomaly detection of anomalies in chaotic systems is
+possible. The problem of predicting a chaotic system long enough to detect
+anomalies in it was solved without making any assumptions about the underlying
+physics.  In addition, the application of the ESN to the prediction problem has
+lead to a very cost efficient search algorithm, which is quite remarkable,
+considering that it is able to create said chaotic predictions.
+
+The only adjustments that have to be made from one dataset to the next are a
+few hyper-parameters.  They can be set approximately by hand by reasoning about
+the specific requirements of the given problem.  Both the state size and the
+spectral radius of the ESN can be chosen within narrow bounds by examining the
+requirements of the problem. The state size should be at least as large as the
+period of the examined sequence and the spectral radius must be large enough to
+capture its non-linearity.  However, to achieve the best results the exact
+choices of hyper-parameters are best left to algorithms such as Bayesian
+Optimization.  This reduces the amount of tweaking that has to be done to apply
+the model to new datasets to a minimum.
 
 The second goal of finding new physical behaviour in the available climate
 model output remains to be achieved. It will require some house keeping in the
-analysis part of the code, but all the necessary parts are in place. To judge
-the scientific value of the potential anomalies that are to be found will
-require and experienced oceanographer.
+analysis part of the code, but all the necessary parts are in place.
 
 With this proof of concept we have shown that the concepts of machine learning
 can be of much use in the field of oceanography and climate physics as a whole.
@@ -45,20 +42,56 @@ learning promises to make the full potential of climate data exploitable in
 completely new ways.
 
 
-\section{Predictor Improvements}
+
+\section{Future Work}%
+\label{sec:future_work}
+
+The ultimate goal of this work was to create an algorithm that skims through
+huge ocean simulation datasets and returns interesting areas to search for new
+physical behaviour. To achieve this, the created anomaly detection, which
+currently can process small windows, has to be scaled to work on the large,
+global domain. This can be achieved two different ways: The most straight
+forward approach is to apply the algorithm by shifting the window and analyzing
+each one of them independently.  Another way would be to create overlapping
+predictions, that are merged and then fed back to the network.
+
+Of course, also the current  prediction model can be improved. There is still
+much room for improvement by increasing the complexity of the ESN. This would,
+most probably, reduce the amount of false positives of the detection.
+Additionally, the performance of the ESN could benefit tremendously from
+implementing it with a different framework than Tensorflow.
+
+\subsection{Scaling to the Global Domain}%
+\label{sub:scaling_to_the_global_domain}
+
+By applying the detection algorithm to small windows of the model output, many
+independent ESNs can be run in parallel. This can be scaled until the memory
+limitations of the available computing resources are reached.
+This spatial parallelization would enable the analysis of the full, global domain.
+
+The parallel ESNs can either operate independently within their window, or the
+predictions can be processed into one large super-prediction. For this the
+windows must, of course, overlap, which introduces a considerable amount of
+communication into the problem. The super-prediction can subsequently be
+divided back into the windows that are fed back to the ESN during the
+prediction phase.
+
+
+\subsection{Predictor Improvements}
 With the rather basic setup of a single ESN cell as the prediction network,
 there is still much room for improvement of the prediction model.  The most
 obvious improvement would be to add a number of  convolutional layers in front
 of the ESN cell. This could lead to significant improvements by leveraging the
-power of convolutional filters that were described in
-Sec.~\ref{sub:convolutional_neural_nets}.  Unfortunately, they would make the
-use of an expensive GD algorithm for the weight optimization necessary.
-By sacrificing the convolutional layer for a feedforward layer the GD
-optimization could be avoided, because it is possible to construct untrained
-feedforward layers in a similar fashion as the ESN has an untrained reservoir.
+spatial information of the input as described in
+Sec.~\ref{sub:convolutional_neural_nets}.  Unfortunately, this would make the
+use of convolutional layers and ain turn an expensive GD algorithm for the
+weight optimization necessary, because the convolutional kernels have to be
+learned.  By sacrificing the convolutional layer for a standard dense layer the
+GD optimization could be avoided, because it is possible to construct untrained
+feedforward layers in a similar fashion like the reservoir of the ESN.
 Networks that contain untrained feedforward layers are called \emph{extreme
-learning machines} and were introduced by [\cite{huang2006}].  The combination of
-the two concepts was introduced by [\cite{butcher2013}] and termed
+learning machines} and were introduced by [\cite{huang2006}].  The combination
+of the two concepts was introduced by [\cite{butcher2013}] and termed
 \emph{reservoir with random static projections} (R$^2$SP).  This architecture
 promises to solve the memory non-linearity tradeoff by separating non-linear
 transformation and internal memory of the network and could thus be much more
@@ -78,16 +111,16 @@ powerful.
 
 Another interesting approach to improve the performance of the network would be
 to employ \emph{evolutionary optimization} techniques [\cite{fogel1997}] to find
-good reservoir matrix $\wmatr{}$ which could be reused for the whole ocean
+a good reservoir matrix $\wmatr{}$ which could be reused for the whole ocean
 dataset.  This would eliminate fluctuations in prediction performance from run
 to run.
 
 
-\section{Performance Improvements}
-Probably the greatest advantage of presented approach is its low computational
-demand. Creating predictions of a few hundred frames for a window of 30x30 pixels
-does not take longer than a few seconds on a standard laptop.
-For a truly automated application of the model to very large datasets with long
+\subsection{Performance Improvements}
+Probably the greatest advantage of the presented approach is its low computational
+demand. Creating predictions of a few hundred frames for a window of 30x30
+pixels does not take longer than a few seconds on a standard laptop.  However,
+for a truly automated application of the model to very large datasets with long
 sequences it would be interesting to implement it in another framework.
 Tensorflow does not excel in RNN computations and it would be quite simple to
 implement the network, for example, in Numpy and parallelize it with Bohrium
@@ -98,8 +131,7 @@ Additionally, the ESN, due to its static nature, holds the potential of being
 compiled to an FPGA, which could improve performance even further.
 
 
-\section{Understanding Recurrent Networks}
-
+\subsection{Understanding Recurrent Networks}
 To date, the general understanding of the ESN and RNNs in general is not very
 good.  It is assumed that an RNN classifier needs as many fixed points as it
 has features to separate, but fundamental understanding is still lacking.  A
