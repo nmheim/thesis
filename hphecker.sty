@@ -1,0 +1,87 @@
+%
+% LaTex package for a title page based on a design by F. Dornhecker
+% and the ku-titlepage
+%
+
+%%% Some packages that are needed.
+\RequirePackage{geometry}
+\RequirePackage{xcolor}
+
+%%% Define custom methods for frontpage.
+\def\ASSIGNMENT{Use \texttt{$\backslash$assignment$\lbrace \ldots \rbrace$}}
+\def\AUTHOR{Use \texttt{$\backslash$author$\lbrace \ldots \rbrace$}}
+\def\TITLE{Use \texttt{$\backslash$title$\lbrace \ldots \rbrace$}}
+\def\SUBTITLE{Use \texttt{$\backslash$subtitle$\lbrace \ldots \rbrace$}}
+\def\ADVISOR{Use \texttt{$\backslash$advisor$\lbrace \ldots \rbrace$}}
+\def\INSTITUTION{Use \texttt{$\backslash$institution$\lbrace \ldots \rbrace$}}
+\def\DEPARTMENT{Use \texttt{$\backslash$department$\lbrace \ldots \rbrace$}}
+\def\DATE{Use \texttt{$\backslash$date$\lbrace \ldots \rbrace$}}
+\def\FRONTPAGEIMAGE{...}
+
+%%% Some of the above methods already exists. We override these.
+\renewcommand{\author}[1]{\def\AUTHOR{#1}}
+\renewcommand{\title}[1]{\def\TITLE{#1}}
+\renewcommand{\date}[1]{\def\DATE{#1}}
+
+%%% The rest are defined.
+\newcommand{\assignment}[1]{\def\ASSIGNMENT{#1}}
+\newcommand{\subtitle}[1]{\def\SUBTITLE{#1}}
+\newcommand{\advisor}[1]{\def\ADVISOR{#1}}
+\newcommand{\institution}[1]{\def\INSTITUTION{#1}}
+\newcommand{\department}[1]{\def\DEPARTMENT{#1}}
+\newcommand{\frontpageimage}[1]{\def\FRONTPAGEIMAGE{#1}}
+
+\def\maketitle{
+  \savegeometry{Mem} % saves the current page style
+  \newgeometry{margin=0pt} % removes all margins
+    \noindent
+    \begin{minipage}{.33\paperwidth}
+      {\color{white} ...}
+    \end{minipage}
+    \begin{minipage}[t]{.67\paperwidth}
+      \includegraphics[width=\textwidth]{\FRONTPAGEIMAGE}
+    \end{minipage}
+
+    \vspace{-1mm}
+    \noindent
+    \fcolorbox{black}{black}{%
+    \begin{minipage}{.33\paperwidth}
+      {...}
+    \end{minipage}
+    \begin{minipage}{.67\paperwidth}
+      \vspace{2cm}
+      {\color{white}
+      {\fontsize{20pt}{22pt}\selectfont\bfseries\TITLE}
+      \par\vspace{4mm}
+      {\fontsize{20pt}{22pt}\selectfont\itshape\SUBTITLE}
+      \par\vspace{12mm}
+
+      {\fontsize{12pt}{22pt}\selectfont\bfseries\ASSIGNMENT}
+      \par\vspace{1mm}
+      {\fontsize{12pt}{16pt}\selectfont\itshape by \AUTHOR}}
+      \vspace{2cm}
+    \end{minipage}}
+
+    \noindent
+    \begin{minipage}{.33\paperwidth}
+      \centering
+      \vspace{1.2cm}
+      \includegraphics[width=.3\linewidth]{cover/ku-logo.jpg}
+    \end{minipage}
+    \begin{minipage}{.67\paperwidth}
+      \vspace{1cm}
+      {\fontsize{12pt}{22pt}\selectfont\bfseries Advisors}\par
+      {\fontsize{12pt}{22pt}\selectfont\itshape\ADVISOR}
+      \par\vspace{5mm}
+      {\fontsize{12pt}{22pt}\selectfont\bfseries\INSTITUTION}\par
+      {\fontsize{12pt}{22pt}\selectfont\itshape\DEPARTMENT}
+    \end{minipage}
+	\pagenumbering{gobble}
+  \phantom{...}
+  \afterpage{\blankpage}
+  \noindent
+
+  % restore margins, etc.
+  \clearpage 
+  \loadgeometry{Mem}
+}

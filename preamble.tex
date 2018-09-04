@@ -1,0 +1,52 @@
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage[english]{babel}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+% custom commands
+\newcommand{\matr}[1]{\boldsymbol{\textbf{#1}}}
+\newcommand{\wmatr}[1]{\matr{W}^{\text{#1}}}
+\newcommand{\dd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\vect}[2]{ \begin{pmatrix} #1 \\ #2 \end{pmatrix} }
+\newcommand{\XT}{\matr{X}^{\text{T}}}
+\newcommand{\XbI}{\vect{\matr{X}}{\beta \matr{I}}}
+%\renewcommand{\vec}{\textbf}
+\newcommand{\vt}[1]{\vec{#1}_t}
+
+% bibliography
+\usepackage[backend=biber, citestyle=authoryear]{biblatex}
+\addbibresource{backmatter/bib.bib}
+
+\graphicspath{{figures/}}
+\input{tikz/networks.tex}
+
+% code listings
+\usepackage[scaled=0.6]{beramono}
+\usepackage{minted}
+\usemintedstyle{tango}
+\definecolor{bggrey}{rgb}{0.90, 0.90, 0.90}
+\definecolor{bgwhite}{rgb}{1,1,1}
+\setminted{bgcolor=bggrey, fontsize=\footnotesize, linenos, numbersep=-12pt}
+% nice inline code
+\makeatletter
+\newcommand{\currentfontsize}{\fontsize{\f@size}{\f@baselineskip}\selectfont}
+\makeatother
+\setmintedinline{fontsize=\currentfontsize, bgcolor=bgwhite}
+\newcommand{\ttt}[1]{\texttt{#1}}
+
+% links in document
+\usepackage{hyperref}
+\renewcommand\UrlFont{\ttfamily\itshape}
+\definecolor{linkblue}{rgb}{0.3, 0.3, 0.3}
+\hypersetup{
+  colorlinks=true,
+  linkbordercolor=linkblue,
+  pdfborderstyle={/S/U/W 1},
+  linkcolor=linkblue,
+  urlcolor=linkblue,
+  allcolors=linkblue,
+}
+
+% show subsections in table
+\setcounter{tocdepth}{2}

@@ -1,0 +1,51 @@
+\section{Tikhonov Regularization}
+\label{sec:tikhonov_regularization}
+The goal of the optimization of the ESN output weights is to find a $\wmatr{out}$
+such that for a given state $x_t$ we can produce a prediction of the next time step:
+\begin{equation}
+  y_t = \wmatr{out} x_t
+\end{equation}
+
+By collecting a number of states $ \matr{X} = (x_1, ..., x_T)$, that are produced by the inputs
+$u_1, ..., u_T$, we can write
+\begin{equation}
+  \matr{D} = \wmatr{out} \matr{X},
+\end{equation}
+with $\matr{D} = (d_1, ..., d_T)$ as the conactenated desired outputs.
+The optimal output weights can then be found by simply solving the overdetermined
+system:
+\begin{equation}
+  \wmatr{out} = \matr{D} \XT (\matr{X} \XT)^{-1}
+\end{equation}
+
+With this simple least squares solution, the output weights are very prone to
+overfitting, which is why a regularized version, also known as Tikhonov Regularization,
+often yields more general results, that let the ESN perform much better in the
+freely running mode.
+
+Tikhonov Regularization minimizes the function $\Phi$:
+\begin{equation}
+  \label{eq:phi}
+  \Phi(\wmatr{out}) = || \matr{D} - \wmatr{out} \matr{X} ||^2
+                      + \beta^2 || \wmatr{out} ||^2,
+\end{equation}
+where the first term represents the \emph{misfit} of the outputs to the target
+and the second term introduces a the regularization.
+A larger coefficient $\beta$ will favor smaller output weights in the solution,
+which prevents them from overfitting.
+
+Eq.~\ref{eq:phi} can be written as:
+\begin{equation}
+  \Phi(\wmatr{out}) = \bigg | \bigg| 
+                      \vect{\matr{D}}{0}
+                    - \wmatr{out} \vect{\matr{X}}{\beta \matr{I}}
+                      \bigg | \bigg| ^2,
+\end{equation}
+which can be solved by:
+
+\begin{align}
+  \vect{\matr{D}}{0} &= \wmatr{out} \XbI \\
+  \vect{\matr{D}}{0} \XbI^{\text{T}} &= \wmatr{out} \XbI \XbI^{\text{T}}\\
+  \vect{\matr{D}}{0} \XbI^{\text{T}} \bigg[\XbI \XbI^{\text{T}}\bigg]^{-1} &= \wmatr{out} \\
+  \wmatr{out} &= \matr{D} \XT (\matr{X}\XT + \beta^2 \matr{I})^{-1}
+\end{align}

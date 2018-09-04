@@ -1,0 +1,14 @@
+   {
+     "activation": "<function tanh at 0x7ffa8fddb2a8>", 
+     "esn_num_units": "30", 
+     "esn_spectral_radius": "---", 
+     "esn_density": "0.2", 
+     "in_weight_init": "0.01", 
+
+     "input_len": "50", 
+     "batch_size": "2000", 
+     "output_len": "50", 
+
+     "tikhonov_beta": "False", 
+     ...
+   }

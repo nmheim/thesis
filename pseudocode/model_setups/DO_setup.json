@@ -1,0 +1,17 @@
+   {
+     "esn_cell": "<class 'esn.cell.esn_cell.ESNCell'>", 
+     "activation": "<function tanh at 0x7f4e1ef96d70>", 
+     "esn_num_units": "500", 
+     "esn_spectral_radius": "1.74", 
+     "esn_density": "0.10", 
+     "in_weight_init": "0.01", 
+   
+     "nr_equilibration_frames": "200", 
+     "nr_prev_frames": "1500", 
+     "nr_next_frames": "200", 
+   
+     "tikhonov_beta": "5e-06", 
+ 
+     "input_image_dims": "(2, 1)", 
+     ...
+   }

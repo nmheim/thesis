@@ -1,0 +1,49 @@
+\documentclass[12pt, twoside, openright, a4paper]{gradient}
+\input{preamble.tex}
+
+\begin{document}
+
+\assignment{Master Thesis}
+\author{Niklas Heim\\ September 4th, 2018}
+\title{Automated Anomaly Detection \\ In Chaotic Time Series}
+\subtitle{A Reservoir Computing Approach}
+\frontpageimage{cover/gradient_cover.jpg}
+\advisor{Professor Brian Vinter\\ Asst. Professor James E. Avery}
+\institution{University of Copenhagen}
+\department{Niels Bohr Institute}
+
+\maketitle
+
+\frontmatter
+\pagestyle{ruledtitle}
+\include{frontmatter/acknowledgements}
+\cleardoublepage
+\include{frontmatter/abstract_en}
+\begin{KeepFromToc}
+\hypersetup{linkcolor=black}
+\newpage\tableofcontents
+\hypersetup{linkcolor=linkblue}
+\end{KeepFromToc}
+
+\mainmatter
+\include{mainmatter/introduction}
+\include{mainmatter/anomaly}
+\include{mainmatter/feedforward_nets}
+\include{mainmatter/recurrent_nets}
+\include{mainmatter/reservoir_computing}
+\include{mainmatter/hyperparameter}
+\include{mainmatter/implementation}
+\include{mainmatter/results}
+\include{mainmatter/future_work}
+
+\appendix
+\chapter{Derivations}
+\label{app:derivations}
+\newpage
+
+\input{backmatter/eigenvalues.tex}
+\input{backmatter/tikhonov.tex}
+
+\printbibliography[title={\color{black} Bibiliography}]
+
+\end{document}

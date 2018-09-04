@@ -1,0 +1,42 @@
+\section*{Abstract}%
+\label{sec:abstract}
+
+The purpose of this study is to create a framework that is able to
+automatically detect unusual behaviour in non-linear dynamical systems.  We
+assume no prior information about the physics that govern these dynamics, so
+there is no knowledge about the kind of anomaly that we are looking for.  This
+is motivated by the large amounts of output that state of the art,
+eddy-resolving ocean models produce.  These large datasets might contain
+unknown physical behaviour, such as the recently discovered Kuroshio anomaly
+(Sec.~\ref{sec:kuroshio}).  It is impossible for humans to evaluate all the
+available climate model data within an acceptable time frame. An automated
+anomaly detection is a first step towards harnessing the full potential of such
+expensive simulations and could contribute to a deeper understanding of the
+ocean circulation.\\
+
+The detection problem is approached by trying to define what is normal, so that
+everything that looks significantly different from this norm can be treated as
+anomalous. This norm is found by predicting the future evolution of a system
+that has been observed for a certain amount of time.  This is not a trivial
+task, because non-linear systems can exhibit chaotic behaviour which makes
+their prediction notoriously hard. However, it can be solved by employing a
+special kind of recurrent neural network. Once the prediction is extracted from
+the network, it can be compared to the true values of the dataset and where
+they deviate significantly, a potential anomaly is found.
+
+The type of recurrent network that is used is called \emph{echo state network}
+and belongs to the class of \emph{reservoir computing} methods.  They feature a
+comparatively low computational cost and have been shown to be able to predict
+chaotic systems with surprising accuracy [\cite{pathak2018model}].\\
+
+Concepts of machine learning and artificial intelligence are, despite their
+proven effectiveness, still very sparsely utilized in climate research.
+Therefore this work also serves as a showcase of what can be done by expanding
+the set of standard analysis tools towards these methods.
+The final result is the successful detection of the Kuroshio anomaly in the
+turbulent ocean dataset.\\
+
+\vfill
+The code for the anomaly detection (\url{https://github.com/nmheim/torsk}) and
+for this document (\url{https://github.com/nmheim/thesis}) can be found on
+GitHub.

@@ -1,0 +1,159 @@
+\section{Spectral Radius}
+\label{sec:spectral_radius}
+
+The spectral radius is a key parameter that determines some properties of the 
+echo state network weight matrix, which we will here denote as
+$\matr{A} \in \mathbb{C} ^{n\times n}$.
+If $\matr{A}$ has eigenvalues $\lambda_1, ... , \lambda_p$, where $p \leq n$,
+the spectral radius is defined as
+\begin{equation}
+  \rho(\matr{A}) = \max \{|\lambda_1|,...,|\lambda_p|\}.
+\end{equation}
+
+Thus, to obtain the spectral radius we somehow have to find a reasonably close estimate
+for the absolute largest eigenvalue.
+For very large matrices, it obviously becomes infeasible to calculate all eigenvalues
+which has a computational complexity of $O(n^3)$.
+One method of quickly computing the largest eigenvalue is called \textbf{inverse iteraion}
+(or inverse power method), but before diving into the exact algorithm we will go
+through a quick recap of the linear algebra that is necessary for inverse iteration.
+
+If the matrix $\matr{A}$ is diagonalizable, we can find a matrix $\matr{S}$ such that
+\begin{equation}
+  \label{eq:diagonal_matrix}
+  \matr{A} = \matr{S}^{-1} {\Lambda} \matr{S},
+\end{equation}
+where $\Lambda$ is a diagonal matrix containing the eigenvalues
+$\lambda_1,...,\lambda_p$.
+From Eq.~\ref{eq:diagonal_matrix} follows that:
+\begin{equation}
+  \label{eq:matrix_power}
+  \matr{A} \matr{A} = (\matr{S}^{-1}\Lambda\matr{S})(\matr{S}^{-1}\Lambda\matr{S})
+                    = \matr{S}^{-1}\Lambda^2\matr{S},
+\end{equation}
+which means that for any continuous function one can write:
+\begin{equation}
+  f(\matr{A}) = \matr{S}^{-1} f(\Lambda) \matr{S},
+\end{equation}
+because every continuous function can be approximated by a polynomial function.
+In our case it will turn out to be very useful, that
+\begin{equation}
+  \label{eq:inverse_ev}
+  (\matr{A} - \sigma \mathbb{I})^{-1} =
+        \matr{S}^{-1} (\Lambda - \sigma \mathbb{I})^{-1} \matr{S},
+\end{equation}
+
+because only the eigenvalues (on the diagonal of $\Lambda$) are affected by
+the inversion, but the eigenvectors stay exactly the same.
+
+
+\subsubsection{Power Method}
+\label{ssub:power_method}
+Suppose $\vec{x} \in \mathbb{C} ^n$, that can be written as the sum of eigenvectors
+and eigenvalues:
+
+\begin{equation}
+  \vec{x} = \lambda_1\vec{e}_1 + ... + \lambda_p\vec{e}_p,
+\end{equation}
+
+where $|\lambda_1| > |\lambda_2| > ... > |\lambda_p|$ it follows that:
+\begin{equation}
+  \label{eq:sum_ev}
+  \matr{A}^j \vec{x} = \lambda_1^j\vec{e}_1 + ... + \lambda_p^j\vec{e}_p,
+  =  \lambda_1^j \sum_{i=0}^{p} \bigg(\frac{\lambda_i}{\lambda_1}\bigg)^j \vec{e}_i,
+\end{equation}
+
+which means that for large enough $j$ Eq.~\ref{eq:sum_ev} converges to:
+\begin{equation}
+  \label{eq:power_method}
+  \vec{\mu} = \matr{A}^j \vec{x} \rightarrow \lambda_1^j \vec{e_1}.
+\end{equation}
+
+Eq.~\ref{eq:power_method} is called the \textbf{power method} for finding eigenvalues.
+From the estimate $\vec{\mu}$ of the largest eigenvector one can easily obtain the estimate
+$\sigma$ of the corresponding eigenvalue by applying the Rayleigh quotient:
+\begin{equation}
+  \label{eq:rayleigh_quotient}
+  \sigma = \frac{\vec{\mu}^* \matr{A} \vec{\mu}}{||\vec{\mu}^* \vec{\mu}||}
+\end{equation}
+
+From Eq.~\ref{eq:sum_ev} one can quickly see that it has an error of $O(|\lambda_2/\lambda_1|^j)$,
+which means that it converges very slowly if the two largest eigenvalues are very
+close to each other.
+
+
+\subsubsection{Inverse Iteration}
+\label{ssub:inverse_iteration}
+The inverse iteration method aims to solve the problem of slow convergence of the
+power method by manipulating the eigenvalues of the iterated matrix favourably.
+
+Suppose we can find a reasonably close estimate $\sigma$ of an eigenvector $\lambda_i$
+of $\matr{A}$, then the matrix $(\matr{A} - \sigma \mathbb{I})$ is almost singular,
+because on of the elements of its diagonalized counterpart is close to zero.
+\footnote{The estimate $\sigma$ is often called shift, which is why this method is also known
+as the \textit{inverse shift method}.}
+This means, according to Eq.~\ref{eq:inverse_ev} that
+$(\matr{A} - \sigma \mathbb{I})^{-1}$ has one very large eigenvalue,
+which we can exploit for a fast conversion of the power method.
+Starting from a random vector $\vec{x}_0$, the iterative update equation for the
+inverse power method reads:
+\begin{equation}
+  \label{eq:inverse_iteration}
+  \vec{x}_{i+1} = (\matr{A} - \sigma \mathbb{I})^{-1} \vec{x}_i,
+\end{equation}
+The shift $\sigma$ is updated at each iteration by using the Rayleigh
+quotient Eq.~\ref{eq:rayleigh_quotient}.
+This results in an increasingly good estimate of the desired eigenvalue, which
+in turn speeds up the convergence of the inverse iteration.
+This only becomes a problem once the calculated shift hits the exact value of
+an eigenvalue of $\matr{A}$. Then the shifted matrix becomes singular.
+\\
+Eq.~\ref{eq:inverse_iteration} can be rewritten in terms of a linear system solver:
+\begin{equation}
+  \vec{x}_{i+1} = \text{linearSolve}(\matr{A} - \sigma \mathbb{I}, \text{ }\vec{x}_i)
+\end{equation}
+in order to exploit the speedup of solving a linear system compared to an inverse
+matrix computation, which results in especially large speedups as soon as the
+matrix $\matr{A}$ is very sparse.
+
+The last remaining problem to solve is a reasonable estimate for the largest eigenvalue
+of $\matr{A}$, preferably and upper bound in order to make sure that the iteration
+does not converge to the second largest eigenvalue.
+The most straight forward thing to do here would be taking the Frobenius norm of $\matr{A}$,
+which provides an intuitive upper bound of the spectral radius:
+\begin{align}
+  |\lambda|^k ||\vec{e}|| = ||\lambda^k \vec{e}||
+  &= ||\matr{A}^k \vec{e}|| \leq ||\matr{A}^k|| \cdot ||\vec{e}|| \\
+  |\lambda^k| &\leq ||A^k||
+\end{align}
+A faster way of doing this is based on the so called Gershgorin disks \cite{Gershgorin}.
+If $a_{ij}$ is an element of the complex matrix $\matr{A}$ we can define
+$R_i=\sum_{j\neq i}|a_{ij}|$ as the radius of a disk $D(a_{ii}, R_i)$ centered at
+$a_{ii}$.
+Gershgorin's circle theorem states that the eigenvalues of $\matr{A}$ have lie
+within the Gershgorin disks.
+Picking the the largest $R_i$ in combination with the largest $a_{ii}$ as an upper
+bound thus provides an upper bound for the largest eigenvalue in much less than
+$O(n^3)$ (complexity of the Frobenius norm).
+
+This iterative inverse method typically converges in a few steps, which makes it
+vastly superior to calculating every eigenvalue and picking its maximum in order
+to find the spectral radius.\\
+
+%%Fig.~\ref{fig:inv_iter_speedup} demonstrates that by this method we can obtain
+%%the spectral radius of a matrix about 40 times faster than by calculating
+%%all eigenvalues by hand and picking the largest one.
+%
+%%\begin{figure}[h]
+%%  \centering
+%%  \includegraphics[width=0.8\linewidth]{inv_iter_speedup.png}
+%%  \caption{Speedup of inverse iteration algorithm compared to the Numpy eigenvalue
+%%  calculation. CREDITS TO JAMES AVERY}
+%%  \label{fig:inv_iter_speedup}
+%%\end{figure}
+%
+%%if diagonalizaable:
+%%else:
+%%spectral theorem with defective part etc.
+%
+%% and: http://www.cs.cornell.edu/~bindel/class/cs6210-f09/lec26.pdf
