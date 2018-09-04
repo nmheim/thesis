@@ -112,10 +112,10 @@ which in essence confirms the conjectures that were made before.
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{mackey_esn_ba_var_loss.pdf}
-  \caption{Hyper-parameters over the squared error. The very large values
-  are caused by diverging predictions that were clipped to a maximal
-  $\mathrm{RMSE}=10^{20}$. The weight initialization and the sparsity
-  parameters yield good performance in a certain range, the spectral radius
+  \caption{Hyper-parameters over the squared error metric. The very large
+    values are caused by diverging predictions that were clipped to a maximal
+    $\mathrm{RMSE}=10^{20}$. The weight initialization and the sparsity
+    parameters yield good performance in a certain range, the spectral radius
   only allows good performance for values larger than one.}
   \label{fig:mackey_esn_ba_var_loss}
 \end{figure}
@@ -192,7 +192,7 @@ prediction.\\
     chosen starting points of the Mackey-Glass series. All predictions were
     made by an ESN with optimal hyper-parameters.  The target values $d$ are
     shown in blue, prediction $y$ in yellow, and the error $e = |d - y|$ in
-    green.The plot in the bottom shows the variability of $e$ over different
+    green. The plot in the bottom shows the variability of $e$ over different
     predictions.
   }
   \label{fig:mackey1d_predictions}
@@ -226,9 +226,11 @@ anomalies that would, most probably, not be spotted by a human.
   \centering
   \includegraphics[width=\linewidth]{mackey_visible_anomalies.pdf}
   \caption{Mackey Glass system with artificially introduced anomalies at every
-  400th step with $\delta=0.05$. The anomaly score catches the irregularly high error
-  regions slightly too early, because the prediction error goes up as soon as the
-  prediction window reaches into the anomalous regions.}
+    400th step with $\delta=0.05$. The detected anomalies are indicated by the
+    yellow bars in the plots of the score $\Sigma$. The anomaly score catches
+    the irregularly high error regions slightly too early, because the
+    prediction error goes up as soon as the prediction window reaches into the
+  anomalous regions.}
   \label{fig:mackey_visible_anomalies}
 \end{figure}
 
@@ -278,17 +280,19 @@ irregular dataset the predictions are not very good, but at points where the
 sequences change abruptly they deviate much more from the target values than
 they do otherwise. This can be exploited to detect the DO events which are
 located exactly at these abruptly changing points. Apart from the online weight
-adaption, the procedure is the same as with the MG system. The score is calculated
-from the MPE and thresholded, resulting in the detection of anomalies at the
-yellow colored regions of Fig.~\ref{fig:d18O_anomalies}.
-Abrupt changes after steady periods are easily detected by the algorithm.
-DO events that lie close to each other tend to slip through. This is due to
-the fact that the ESN learns from the previous DO events and as it is trained
-on these anomalies, they are considered normal.
+adaption, the procedure is the same as with the MG system. The score is
+calculated from the MPE and thresholded, resulting in the detection of
+anomalies at the yellow colored regions of Fig.~\ref{fig:d18O_anomalies}.
+Abrupt changes after steady periods are easily detected by the algorithm.  DO
+events that lie close to each other tend to slip through. This is due to the
+fact that the ESN learns from the previous DO events and as it is trained on
+these anomalies, they are considered normal.
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{d18O_Ca2_anomalies.pdf}
-  \caption{Detected anomalies in the DO dataset.}
+  \caption{Results of the DO dataset. The DO events are marked with
+  the grey background. Detected anomalies are indicated by the yellow bars in
+  the plots of the normality score $\Sigma$}
   \label{fig:d18O_anomalies}
 \end{figure}
 
@@ -351,7 +355,7 @@ hundred MB.
   \caption{Another prediction example. Here it looks like the internal state of
   the ESN has reached a fixed point, so the prediction remains constant after
   day 10100.  This fixed point interestingly produces predictions that are very
-  similar to the mean contracted state of the Kuroshio.}
+  similar to the mean contracted state of the Kuroshio, if viewed in 2D.}
   \label{fig:kuro_pred_stepidx20}
 \end{figure}
 
@@ -401,9 +405,9 @@ remain as one path that a further studies of this problem could take.
 \begin{figure}
   \centering
   \includegraphics[width=1.1\linewidth]{kuro_mean_pred.pdf}
-  \caption{The prediction plot shows the true values of one row of the SSH
-    frames that were fed to the ESN.  In the target plot we can see the
-    prediction that was made based on the internal state from 100 steps before.
+  \caption{The target plot shows the true values of one row of the SSH
+    frames that were fed to the ESN.  In the prediction plot we can see the
+    prediction that was made based on the internal state 100 steps before.
     The error plot depicts the mean error of one prediction sequence and in the
     bottom we can see the resulting anomaly score on a logarithmic color scale.
   }

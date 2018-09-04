@@ -69,8 +69,7 @@ features that are needed to implement RNNs are accesible in a much more
 pythonic way in PyTorch. Additionally, PyTorch seems to be faster at RNN tasks
 than Tensorflow, but this claim was not veryfied personally. That being said,
 PyTorch is still in an even earlier stage of development than Tensorflow, and
-was not as popular in the beginning of this work.\\
-
+was not as popular in the beginning of this work.
 
 
 \section{The \texttt{torsk} Python Package}%
@@ -86,14 +85,18 @@ The package that implements the anomaly detection is subdivided into three main
 parts: \ttt{torsk.datasets} (containing functions that create input pipelines
 for the different datasets), \ttt{torsk.esn} (where the ESN implementation
 itself is located), and \ttt{torsk.models} (containing different network
-architectures). In addition, there are two small visualization and analysis
-submodules to inspect the output of the Tensorflow models.
+architectures). The two most important models are the \ttt{grad} model,
+implementing the prediction with Tensorflow optimizers and the \ttt{lms} model,
+which uses Least Mean Squares techniques, such as Tikhonov Regularization.  In
+addition, there are two small visualization and analysis submodules to inspect
+the output of the Tensorflow models.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.5\linewidth]{tikz/flow.pdf}
   \caption{Flow chart of the execution of \texttt{torsk} as it is realized with
-  its run scripts.}
+  its run scripts. The top node is mean to illustrate which components of the
+  package are needed to build a prediction network.}
   \label{fig:flowchart}
 \end{figure}
 
@@ -113,7 +116,7 @@ and can be examined more closely in the examples of the \ttt{torsk} repo, the
 rest of this section will focus on the build phase of the network. 
 
 
-\section{Building the Computational Graph}%
+\section{Building The Computational Graph}%
 \label{sec:building_the_computational_graph}
 
 Before getting into the concrete implementation details of the graph, let us

@@ -1,25 +1,27 @@
 \chapter{Conclusions \& Further Work}
 \label{cha:future_work}
-\epigraph{This chapter draws come conclusions from the practical as well as
-  theoretical considerations that were made during this work. Additionally it
-  provides an outlook on how the developed model could be improved with respect
-  to prediction and computational performance.
+\epigraph{This chapter wraps up this thesis and tries gives some suggestions
+  towards eventual future work. It briefly discusses how the developed
+  model could be scaled to almost arbitrarily large datasets and how the
+  prediction network could be improved with respect to prediction and
+  computational performance.
 }
 
 \section{Conclusions}%
 \label{sec:conclusions}
 
 After a considerable amount of thought was put into the understanding of the
-dynamical nature of ESNs and recurrent neural networks in general I
+dynamical nature of ESNs and recurrent neural networks in general, I
 successfully implemented a framework that is able to predict high-dimensional,
-spatio-temporal, chaotic time series.  It can therefore be concluded, that a
-general, automated anomaly detection of anomalies in chaotic systems is
-possible. The problem of predicting a chaotic system long enough to detect
-anomalies in it was solved without making any assumptions about the underlying
+spatio-temporal, chaotic time series.  It can be concluded from the results
+chapter, that a general, automated anomaly detection of anomalies in chaotic
+systems is possible. The problem of predicting a chaotic system long enough to
+detect anomalies was solved without making any assumptions about the underlying
 physics.  In addition, the application of the ESN to the prediction problem has
-lead to a very cost efficient search algorithm, which is quite remarkable,
+lead to a very cost efficient search algorithm, which is quite striking,
 considering that it is able to create said chaotic predictions.
 
+The generality of the prediction framework is another notable point.
 The only adjustments that have to be made from one dataset to the next are a
 few hyper-parameters.  They can be set approximately by hand by reasoning about
 the specific requirements of the given problem.  Both the state size and the
@@ -49,11 +51,9 @@ completely new ways.
 The ultimate goal of this work was to create an algorithm that skims through
 huge ocean simulation datasets and returns interesting areas to search for new
 physical behaviour. To achieve this, the created anomaly detection, which
-currently can process small windows, has to be scaled to work on the large,
-global domain. This can be achieved two different ways: The most straight
-forward approach is to apply the algorithm by shifting the window and analyzing
-each one of them independently.  Another way would be to create overlapping
-predictions, that are merged and then fed back to the network.
+can currently process small windows, has to be scaled to work on the large,
+global domain. This can be achieved by running many ESNs in parallel over,
+possibly overlapping, small windows of the global domain.
 
 Of course, also the current  prediction model can be improved. There is still
 much room for improvement by increasing the complexity of the ESN. This would,
@@ -61,7 +61,7 @@ most probably, reduce the amount of false positives of the detection.
 Additionally, the performance of the ESN could benefit tremendously from
 implementing it with a different framework than Tensorflow.
 
-\subsection{Scaling to the Global Domain}%
+\subsection{Scaling To The Global Domain}%
 \label{sub:scaling_to_the_global_domain}
 
 By applying the detection algorithm to small windows of the model output, many
@@ -72,17 +72,23 @@ This spatial parallelization would enable the analysis of the full, global domai
 The parallel ESNs can either operate independently within their window, or the
 predictions can be processed into one large super-prediction. For this the
 windows must, of course, overlap, which introduces a considerable amount of
-communication into the problem. The super-prediction can subsequently be
-divided back into the windows that are fed back to the ESN during the
-prediction phase.
+communication between the parallel ESN instances into the problem. The
+super-prediction can subsequently be divided back into the windows that are fed
+back to the individual ESNs. Should physical memory (not STM) become a problem in
+the super-prediction approach, the number of individual reservoirs could be
+reduced by sharing the large reservoir matrix and only having individual output
+weights for each sub-prediction.
+
+The super-prediction approach would also reduce boundary effects like the
+large unexpected eddy that entered the Kuroshio prediction window.
 
 
 \subsection{Predictor Improvements}
 With the rather basic setup of a single ESN cell as the prediction network,
-there is still much room for improvement of the prediction model.  The most
-obvious improvement would be to add a number of  convolutional layers in front
-of the ESN cell. This could lead to significant improvements by leveraging the
-spatial information of the input as described in
+there is still much room for improvements of the prediction model itself.  The
+most obvious of which would be to add convolutional layers in front of the ESN
+cell. This could lead to significant improvements by leveraging the spatial
+information of the input as described in
 Sec.~\ref{sub:convolutional_neural_nets}.  Unfortunately, this would make the
 use of convolutional layers and ain turn an expensive GD algorithm for the
 weight optimization necessary, because the convolutional kernels have to be
