@@ -1,9 +1,9 @@
 \chapter{Conclusions \& Further Work}
 \label{cha:future_work}
-\epigraph{This chapter wraps up this thesis and tries gives some suggestions
+\epigraph{This chapter wraps up this thesis and gives some suggestions
   towards eventual future work. It briefly discusses how the developed
   model could be scaled to almost arbitrarily large datasets and how the
-  prediction network could be improved with respect to prediction and
+  forcasting network could be improved with respect to prediction and
   computational performance.
 }
 
@@ -13,25 +13,25 @@
 After a considerable amount of thought was put into the understanding of the
 dynamical nature of ESNs and recurrent neural networks in general, I
 successfully implemented a framework that is able to predict high-dimensional,
-spatio-temporal, chaotic time series.  It can be concluded from the results
-chapter, that a general, automated anomaly detection of anomalies in chaotic
-systems is possible. The problem of predicting a chaotic system long enough to
-detect anomalies was solved without making any assumptions about the underlying
-physics.  In addition, the application of the ESN to the prediction problem has
-lead to a very cost efficient search algorithm, which is quite striking,
-considering that it is able to create said chaotic predictions.
+spatio-temporal, chaotic time series.  It can be concluded from
+chapter~\ref{cha:results}, that an automated detection of
+anomalies in chaotic systems is possible. The application of the
+ESN to the prediction problem has lead to a very cost efficient search
+algorithm, which is quite striking, considering that it is able to create said
+chaotic predictions.
 
-The generality of the prediction framework is another notable point.
-The only adjustments that have to be made from one dataset to the next are a
-few hyper-parameters.  They can be set approximately by hand by reasoning about
-the specific requirements of the given problem.  Both the state size and the
-spectral radius of the ESN can be chosen within narrow bounds by examining the
-requirements of the problem. The state size should be at least as large as the
-period of the examined sequence and the spectral radius must be large enough to
-capture its non-linearity.  However, to achieve the best results the exact
-choices of hyper-parameters are best left to algorithms such as Bayesian
-Optimization.  This reduces the amount of tweaking that has to be done to apply
-the model to new datasets to a minimum.
+The generality of the prediction framework is another notable point.  The
+problem of predicting a chaotic system long enough to detect anomalies was
+solved without making any assumptions about the underlying physics.  The only
+adjustments that have to be made from one dataset to the next are a few
+hyper-parameters. Both the state size and the spectral radius of the ESN can be
+chosen within narrow bounds by examining the requirements of the problem. The
+state size should be at least as large as the period of the examined sequence
+and the spectral radius must be large enough to capture its non-linearity.
+However, to achieve the best results the exact choices of hyper-parameters are
+best left to algorithms such as Bayesian Optimization.  This reduces the amount
+of tweaking that has to be done to apply the model to new datasets to a
+minimum.
 
 The second goal of finding new physical behaviour in the available climate
 model output remains to be achieved. It will require some house keeping in the
@@ -52,8 +52,8 @@ The ultimate goal of this work was to create an algorithm that skims through
 huge ocean simulation datasets and returns interesting areas to search for new
 physical behaviour. To achieve this, the created anomaly detection, which
 can currently process small windows, has to be scaled to work on the large,
-global domain. This can be achieved by running many ESNs in parallel over,
-possibly overlapping, small windows of the global domain.
+global domain. This can be achieved by running many ESNs in parallel over -
+possibly overlapping - small windows of the global domain.
 
 Of course, also the current  prediction model can be improved. There is still
 much room for improvement by increasing the complexity of the ESN. This would,
@@ -84,17 +84,16 @@ large unexpected eddy that entered the Kuroshio prediction window.
 
 
 \subsection{Predictor Improvements}
+
 With the rather basic setup of a single ESN cell as the prediction network,
 there is still much room for improvements of the prediction model itself.  The
 most obvious of which would be to add convolutional layers in front of the ESN
 cell. This could lead to significant improvements by leveraging the spatial
 information of the input as described in
-Sec.~\ref{sub:convolutional_neural_nets}.  Unfortunately, this would make the
-use of convolutional layers and ain turn an expensive GD algorithm for the
-weight optimization necessary, because the convolutional kernels have to be
-learned.  By sacrificing the convolutional layer for a standard dense layer the
-GD optimization could be avoided, because it is possible to construct untrained
-feedforward layers in a similar fashion like the reservoir of the ESN.
+Sec.~\ref{sub:convolutional_neural_nets}. This would mean that convolution
+filters have to be learned and make an expensive GD algorithm for the weight
+optimization necessary. However, it might be possible to leverage random
+convolutional layers in a similar fashion like the reservoir of the ESN does.
 Networks that contain untrained feedforward layers are called \emph{extreme
 learning machines} and were introduced by [\cite{huang2006}].  The combination
 of the two concepts was introduced by [\cite{butcher2013}] and termed
@@ -106,7 +105,7 @@ powerful.
 \begin{figure}
   \centering
   \includegraphics[width=0.6\linewidth]{r2sp.png}
-  \caption{Reservoir with random static projections~[\cite{butcher2013}]. The
+  \caption{Reservoir with random static projections [\cite{butcher2013}]. The
   stat$_1$ and stat$_2$ layers are static feedforward layers, that take the
   part of the non-linear transformation.  The recurrent internal units
   represent the memory of the network. Their reservoir matrix can be
@@ -140,7 +139,7 @@ compiled to an FPGA, which could improve performance even further.
 \subsection{Understanding Recurrent Networks}
 To date, the general understanding of the ESN and RNNs in general is not very
 good.  It is assumed that an RNN classifier needs as many fixed points as it
-has features to separate, but fundamental understanding is still lacking.  A
+has features to separate, but a fundamental understanding is still lacking.  A
 further investigation of the influence of fixed-points and period cycles within
 the internal state evolution on the memory and predictive capabilities of RNNs
 would be very interesting.  This could lead to a more solid understanding of

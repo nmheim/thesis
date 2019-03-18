@@ -3,10 +3,10 @@
 \epigraph{
   This chapter will analyze the practical capabilities of the echo state
   network for anomaly detection in time series.  First we analyze the
-  \emph{memory capacity} (MC) of the ESN and show how well the ESN can predict
+  \emph{memory capacity} (MC) of the ESN and show how well it can predict
   a scalar chaotic time series. A tradeoff between networks with large MC and
   good capability to predict non-linearities is discussed before moving on to
-  two input images and sea surface height prediction.
+  high-dimensional input images and sea surface height prediction.
 }
 
 
@@ -16,8 +16,8 @@
 
 The short-term memory capacity (\emph{MC}) of the internal state can be
 estimated through the so-called coefficient of determination $R^2$  and a
-simple experiment.  $R^2$ is the squared correlation coefficient. For two
-variables $X$ and $Y$ it is defined by:
+simple experiment.  $R^2$ is also called the squared correlation coefficient.
+For two variables $X$ and $Y$ it is defined by:
 \begin{equation}
   \label{eq:detcoeff}
   R^2 = \text{detCoeff}(X, Y)
@@ -51,7 +51,7 @@ they are equal and zero if there is no correlation between them at all.
   \includegraphics[width=\linewidth]{mc_seq.pdf}
   \caption{Determination coefficient over time for various spectral radii of
   the reservoir and two different learning algorithms. On the left the network
-  was trained with GD and on the right with pseudo-inverse regression. The SGD
+  was trained with SGD and on the right with pseudo-inverse regression. The SGD
   trained network does not show a clear depedence on spectral radius, while in
   the LMS network it is clearly visible.}
   \label{fig:mc_seq}
