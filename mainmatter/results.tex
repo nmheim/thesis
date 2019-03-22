@@ -72,20 +72,20 @@ sequences.  Once with the Adam algorithm and once with the pseudo-inverse
 method (which of course only need a single batch of random sequences to be
 trained). After the training phase, another batch is fed to the network for
 evaluation. An exemplary reconstruction is shown in
-figure~\ref{fig:random_timeseries_recovery}.  It becomes evident that the most
+Fig.~\ref{fig:random_timeseries_recovery}.  It becomes evident that the most
 recent time steps can be reconstructed almost perfectly and the memory of the
 network becomes weaker further back in time.  With this setup one can try to
 find the optimal spectral radius, which maximizes the memory capacity.  Both
 plots in Fig.~\ref{fig:mc_seq} show the coefficient of determination over the
-last 25 time steps at varying spectral radius $\rho$.  Interestingly, training
+last 25 time steps at varying spectral radius $\rho$. Training
 the ESN via a least mean squares approach (LMS, pseudo-inverse in this case)
-seems to be much more efficient than training with Adam in this case.  In
-addition, scaling $\rho$ has only a very small effect in the Adam-optimized
-network, while it is clearly visible in the LMS ESN, but this is probably due
-to the worse performance the SGD algorithm.  Figure~\ref{fig:mc_rho} suggests
-that MC increases as $\rho$ approaches one and then quickly degenerates. This
-is thoroughly investigated computationally in a paper by [\cite{farkavs2016}],
-which in essence confirms the conjectures that were made before.
+seems to be much more efficient than training with Adam in this case.  Which is
+also visible in the scaling of $\rho$, which has only a very small effect in
+the Adam-optimized network, while it is clearly visible in the LMS ESN.
+Figure~\ref{fig:mc_rho} suggests that MC increases as $\rho$ approaches one and
+then quickly degenerates. This is thoroughly investigated computationally in a
+paper by [\cite{farkavs2016}], which in essence confirms the conjectures that
+were made before.
 
 \begin{figure}
   \begin{minipage}[t]{.48\textwidth}
@@ -112,9 +112,9 @@ which in essence confirms the conjectures that were made before.
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{mackey_esn_ba_var_loss.pdf}
-  \caption{Hyper-parameters over the squared error metric. The very large
+  \caption{Hyper-parameters over MSE. The very large
     values are caused by diverging predictions that were clipped to a maximal
-    $\mathrm{RMSE}=10^{20}$. The weight initialization and the sparsity
+    $\mathrm{MSE}=10^{20}$. The weight initialization and the sparsity
     parameters yield good performance in a certain range, the spectral radius
   only allows good performance for values larger than one.}
   \label{fig:mackey_esn_ba_var_loss}
@@ -207,7 +207,7 @@ an amount $\delta$ set back to its initial value after 50 steps. Depending on
 the magnitude of $\delta$ this creates rather smooth looking anomalies. Easily
 visual anomalies are created with a value of $\delta = 0.05$. To search the
 outliers, the trained network receives a sliding window of 300 steps of the
-anomalous sequence.  The predictions for the next $N_p = 50$ steps into the
+anomalous sequence.  The predictions for the next $N_p = 100$ steps into the
 future are collected and the \emph{mean prediction error} (MPE) is calculated
 for every sequence that was fed to the ESN:
 \begin{equation}
@@ -215,7 +215,7 @@ for every sequence that was fed to the ESN:
 \end{equation}
 The MPE is recorded for the whole dataset and the normality score $\Sigma$
 (Eq.~\ref{eq:normality_score}) is computed with a large window size of 100
-steps and a small window size of 5 steps..  The result is shown in
+steps and a small window size of 5 steps.  The result is shown in
 Fig.~\ref{fig:mackey_visible_anomalies}. With delight we can find that all
 anomalies are easily caught.  To demonstrate the capabilities of the ESN to
 efficiently find outliers in chaotic systems like the MG system,
@@ -245,7 +245,9 @@ anomalies that would, most probably, not be spotted by a human.
 \begin{listing}
   \inputminted{json}{pseudocode/model_setups/mackey_setup.json}
   \label{lst:mackey_setup}
-  \caption{ESN setup parameters for MG prediction.}
+  \caption{ESN setup parameters for MG prediction. The \texttt{DenseESNCell}
+    implies that the reservoir matrix was created with a dense matrix representation
+  }
 \end{listing}
 
 
@@ -320,7 +322,7 @@ these anomalies, they are considered normal.
     \includegraphics[width=.9\linewidth]{kuro_example_pred_stepidx100.pdf}
   \end{minipage} 
   \caption{Four exemplary predictions and corresponding desired outputs in the
-    Kuroshio region. Shown is the 150th predicition frame out of 200.}
+    Kuroshio region. Shown is the 150th prediction frame.}
   \label{fig:kuro_pred_examples} 
 \end{figure}
 
@@ -354,8 +356,8 @@ hundred MB.
   \includegraphics[width=1.1\linewidth]{kuro_pred_stepidx20}
   \caption{Another prediction example. Here it looks like the internal state of
   the ESN has reached a fixed point, so the prediction remains constant after
-  day 10100.  This fixed point interestingly produces predictions that are very
-  similar to the mean contracted state of the Kuroshio, if viewed in 2D.}
+  day 10100.  This fixed point produces predictions that are very similar to
+  the mean contracted state of the Kuroshio, if viewed in 2D.}
   \label{fig:kuro_pred_stepidx20}
 \end{figure}
 

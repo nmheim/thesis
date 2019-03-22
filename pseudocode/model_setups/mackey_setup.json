@@ -1,6 +1,6 @@
    {
-     "esn_cell": "<class 'esn.cell.esn_cell.ESNCell'>", 
-     "activation": "<function tanh at 0x7f6090a53c08>", 
+     "esn_cell": "DenseESNCell", 
+     "activation": "tanh", 
      "esn_num_units": "500", 
      "esn_spectral_radius": "1.40", 
      "esn_density": "0.03", 
@@ -8,7 +8,7 @@
 
      "nr_equilibration_frames": "200", 
      "nr_prev_frames": "2200", 
-     "nr_next_frames": "500", 
+     "nr_next_frames": "100", 
 
      "tikhonov_beta": "False", 
      ...
