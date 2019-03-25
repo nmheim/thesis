@@ -5,7 +5,7 @@
   with traditionally coded algorithms. They have been successfully applied to a
   variety of problems such as pattern recognition, image classification and
   prediction.  As the NN algorithms learn from data, they seem to be good
-  candidates for finding anomalies without any a prior knowledge about the
+  candidates for finding anomalies without any prior knowledge about the
   given dataset, as long as it is big enough. By applying online learning
   algorithms that learn and adapt continuously it should in theory be possible
   to create an automated, adaptive outlier detection.\\ This chapter describes
@@ -24,16 +24,16 @@
 \section{Feedforward Neural Networks}
 \label{sec:feedforward_neural_networks}
 
-The idea for artificial neural networks (ANN) is based on the human brain,
+The idea for artificial neural networks is based on the human brain,
 which is a highly complex, non-linear, and parallel computer.  Just like the
-brain, ANNs are constructed from small units that are connected to each other
+brain, neural networks are constructed from small units that are connected to each other
 with weights. In analogy to its biological counterpart these units are also
 called \emph{neurons}. Older literature also often refers to them as
 \emph{perceptrons}.  They are capable of processing and passing on incoming
 information.
-Traditional feedforward networks implement static input-output mappings, which
-mathematically makes them pure functions of the input signals.
-Figure \ref{fig:perceptron} shows a simple schematic of a single
+Traditional \emph{feedforward neural networks} (FNN) implement static
+input-output mappings, which mathematically makes them pure functions of the
+input signals. Figure \ref{fig:perceptron} shows a simple schematic of a single
 neuron.  It generally has $n$ inputs $u_j$ and one output.  Each of the inputs
 has an assigned weight $w_j$, which determines the contribution of a given
 input to the output.  The output of a neuron will further be referred to as
@@ -63,6 +63,7 @@ they are simply stacked on top of each other:
   \begin{minipage}{.42\textwidth}
     \centering
     \Perceptron
+    \vspace{4.5mm}
     \caption{Schematic of a neuron [\cite{Nielsen2015}].
     The activation function is represented by the circle.}
     \label{fig:perceptron}
@@ -109,7 +110,7 @@ represents the data that is fed into the network, followed by one or more
 hidden layers, and an output layer.  Hidden layers act as a non-linear
 transform that distorts the input in such a way that its classes become
 linearly separable by the output layer.  An interactive explanation of how this
-works can be found on~[\cite{colah_topology}].
+works can be found in a blog post by [\cite{colah_topology}].
 
 \begin{figure}
   \centering
@@ -152,9 +153,9 @@ criterion, a third dataset is needed to evaluate the actual performance and
 generalization of the network.  This third set is called the test set.
 
 Feedforward networks outperform conventional algorithms at tasks such as image
-recognition and other classification and pattern recognition tasks.  They are,
-however, not suitable to model time series, as they cannot model correlations
-of previous inputs. This means that they are not suitable for the prediction of
+recognition and other classification and pattern recognition.  They are,
+however, not very suitable to model time series, as they cannot model correlations
+of previous inputs. This means that they are not designed for the prediction of
 sequences.  To be able to process sequences and make predictions,
 \emph{recurrent} weight connections are introduced in
 Sec.~\ref{sec:recurrent_neural_networks}.  Despite the compelling results that
@@ -180,12 +181,10 @@ combine the concept of filters from signal processing with the ML approach by
 learning their own filters (often referred to as kernels as well) for feature
 detection in images.  The convolutional operation of a given filter $F$ and an
 image $H$ is defined by:
-\begin{equation}
-  G = H * F \text{, where}\\
-\end{equation}
-\begin{equation}
-  G[i,j] = \sum_{u=-k}^k \sum_{v=-k}^k H[i-u, j-v]F[u,v]
-\end{equation}
+\begin{align}
+  G &= H * F \text{, where}\\
+  G[i,j] &= \sum_{u=-k}^k \sum_{v=-k}^k H[i-u, j-v]F[u,v]
+\end{align}
 
 A well known example of a filter for edge detection looks like this:
 \begin{equation}
@@ -244,8 +243,8 @@ generalization of NNs.
 \begin{figure}
   \centering
   \includegraphics[width=0.4\linewidth]{conv_layer.png}
-  \caption{The 2D input image on the right is transformed into a 3D output
-  volume by applying multiple convolutions to the input [\cite{conv_layer_wiki}.}]
+  \caption{The 2D input image on the left is transformed into a 3D output
+  volume by applying multiple convolutions to the input [\cite{conv_layer_wiki}].}
   \label{fig:conv_layer}
 \end{figure}
 
@@ -288,7 +287,7 @@ to be chosen carefully.  If it is too large, the algorithm will oscillate
 around the desired minimum, but if chosen too small, the training times will
 become too long.  Several adaptive gradient computation algorithms address this
 issue. One promising algorithm is called \emph{Adam} (Adaptive Moment
-Estimation) [\cite{ADAM}]. Adam combines adaptive gradient descent methods with
+Estimation). Adam combines adaptive gradient descent methods with
 momentum based algorithms [\cite{ADAM}]. Momentum-based optimizers add a fraction
 of the previously used weight update to simulate an acceleration of the
 gradient descent.  The method of applying the gradient descent algorithm to
@@ -376,8 +375,8 @@ from the denser dots on the black lines.
     \includegraphics[width=\textwidth]{stochastic_adam.pdf}
     stochastic Adam
   \end{minipage}
-  \caption{The plot on the left shows the convergence paths of stochastic plain
-    GD, which find the global minimum in on more case compared to batch GD.}
+  \caption{Convergence paths of stochastic GD algorithms. The noisy paths are
+    due to the approximation of the gradient through mini-batches.}
   \label{fig:error_surface_sgd}
 \end{figure}
 To date, the most commonly used technique to encourage GD to converge to the
@@ -389,8 +388,8 @@ convergence path, which should make it more probable to escape local minima.
 Fig.~\ref{fig:error_surface_sgd} again compares plain GD and Adam, but now with
 the perturbing effect of evaluating an approximate loss. The number of training
 steps that have to be taken increase significantly, but plain SGD is able to
-find the global minimum in four out of five cases now. Stochastic Adam almost
-reaches the minimum in all five cases, but seems just get stuck right before
+find the global minimum in four out of five cases. Stochastic Adam almost
+reaches the minimum in all five cases, but seems to get stuck right before
 the global minimum in the last case.  The conclusion we can draw from the above
 examples is that care has to be taken with respect to the convergence of NNs.
 Different optimizers, gradient descent variations, and initializations can
@@ -399,7 +398,7 @@ pattern recognition tasks, SGD algorithms can find a local minimum that yields
 satisfactory performance, even though it is not guaranteed that this minimum is
 global.  In most applications, an increase in the network connections is
 supposed to create paths around suboptimal local minima [\cite{rumelhart1986}].
-Additionally, in most application the training is actually stopped early,
+Additionally, in most applications the training is actually stopped early,
 meaning at the time the validation error does not decrease further.  This is
 done because a network that is fitted perfectly to the training data would most
 probably not generalize well over new inputs.  In most cases it is therefore
@@ -432,12 +431,12 @@ calculated based on the previous layer:
   y^j_l &= \varphi(z^k_l) \label{eq:forward_pass},
 \end{aligned}
 \end{equation}
-where $\vec{z}_l$ are called the \emph{weighted input}.  The system above may
+where $\vec{z}_l$ are called the \emph{weighted inputs}.  The system above may
 be altered such that a given activation depends on any \emph{previous} layer
 activation, but \emph{not} on activations of any \emph{next} layer. This step is
 named \emph{forward pass}.  During the forward pass, all activations are
 calculated starting from the first layer. The goal of the \emph{backward pass}
-is now to adjust all the weights $w^{jk}_l$ (and biases $b^k_L$) such that the loss $L$
+is to adjust all the weights $w^{jk}_l$ (and biases $b^k_L$) such that the loss $L$
 \begin{equation}
   L = \frac{1}{2}\sum_k (d^k - y^k_L)^2
 \end{equation}
@@ -457,17 +456,17 @@ next layer $l+1$:
 \begin{equation}
   \delta^j_{l} = \dd{L}{z^j_l} = \sum_k \dd{L}{z^j_{l+1}}\dd{z^j_{l+1}}{z^j_l}
   = \sum_k \delta^j_{l+1} \dd{z^j_{l+1}}{z^j_l}
-  = \sum_k \delta^j_{l+1} w^{kj}_{l+1} \varphi'(z^j_l) \label{eq:delta_other_layer}
+  = \sum_k \delta^j_{l+1} w^{kj}_{l+1} \varphi'(z^j_l). \label{eq:delta_other_layer}
 \end{equation}
 
-Now the desired error gradients can be found to be:
+The desired error gradients can be found to be:
 \begin{equation}
 \begin{aligned}
   \dd{L}{b^j_l} &= \delta^j_l, \\
-  \dd{L}{w^{jk}_l} &= y^j_{l-1} \delta^j_l \label{eq:error_grads}
+  \dd{L}{w^{jk}_l} &= y^j_{l-1} \delta^j_l. \label{eq:error_grads}
 \end{aligned}
 \end{equation}
-They can now be used to incrementally update the weights and biases according
+They can be used to incrementally update the weights and biases according
 to Eq.~\ref{eq:gradient_descent}.
 
 \subsubsection{The Backpropagation Algorithm}%
