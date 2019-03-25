@@ -5,7 +5,7 @@
   This thesis will explore the possibility of creating an anomaly detection for
   non-linear time series. In its broadest sense this means finding unusual,
   unexpected, or new patterns in a given dataset. In this introductory chapter,
-  the motivation for searching for anomalous behaviour is described alongside
+  the motivation for searching anomalous behaviour is described alongside
   the requirements for a general anomaly detection algorithm. Because many
   physical systems that are of interest for an outlier detection are non-linear
   and possibly even show \emph{chaotic} behaviour, a brief definition of
@@ -16,8 +16,8 @@
   Chapter~\ref{cha:anomaly_detection};  Chapter~\ref{cha:neural_networks}
   introduces Neural Networks and their potential for predicting arbitrary time
   series, their implementation is described in Chapter~\ref{cha:implementation}
-  and finally Chapter~\ref{cha:results} presents the so-called \emph{echo
-  state network} applied to the three datasets that were introduced earlier.
+  and finally Chapter~\ref{cha:results} presents the so-called \emph{Echo
+  State Network} applied to the three datasets that were introduced earlier.
   \hypersetup{linkcolor=linkblue}
 }
 
@@ -26,7 +26,7 @@
 \label{sec:motivation}
 
 The identification of unusual or aberrational behaviour is treated in many
-other scientific fields:  The purpose of magnetic resonance imaging (MRI) is to
+scientific fields:  The purpose of magnetic resonance imaging (MRI) is to
 find tissues that are not expected to be found at a certain location in the
 body, indicating a tumor. Biology studies genetic anomalies, \emph{mutations},
 that can cause either illness or an increased chance of survival of an
@@ -36,7 +36,7 @@ on peculiarities in credit card data.  Anomalies in weather data can give early
 hints on upcoming droughts, storms or other weather phenomena.  DNA sequence
 mutations, engine monitoring, fraud detection, and weather data are examples of
 sequential datasets that can be regarded as time series.  Detecting outliers in
-time series can help prevent undesired behaviour or develop an early warning
+time series can help prevent undesired behaviour or develop early warning
 systems.  With the growing amount of data that is being produced in many
 different fields it becomes infeasible to manually analyze the given datasets.
 It is therefore highly desirable to create an anomaly detection that is as
@@ -60,7 +60,7 @@ anomaly and the ocean circulation as a whole.
 A large part of the anomaly detection model consists of a Neural Network. They
 have been successfully applied to a very large number of different problems,
 but have not yet found their way into the standard analysis tools of climate
-scientists. With this thesis we hope show what could be achieved with an AI
+scientists. With this thesis we hope to show what could be achieved with an AI
 driven approach to climate research.
 
 
@@ -84,7 +84,7 @@ in Sec.~\ref{sub:prediction}):
 The acquired prediction can subsequently be compared with the true values that
 the sequence takes on for the predicted interval.  As soon as a reasonably good
 prediction is made, the actual detection of an anomaly becomes quite simple.
-Based on the degree of the deviation of prediction and truth, an \emph{normality
+Based on the degree of the deviation of prediction and truth, a \emph{normality
 score} (Sec.~\ref{sub:anomaly_score}) can be calculated to define how large the
 deviation must be in order to count as an anomaly.
 
@@ -257,7 +257,7 @@ measuring other isotopes it is even possible to determine where the dust comes
 from, which gives hints on the atmospheric circulation patterns at the time,
 but these isotopes are not considered here.  Fig.~\ref{fig:doevents} shows how
 well the Ca$^{2+}$ and $\delta^{18}$O values coincide. Not that the time axis
-shows age, so the time moves forward from right to left. The DO events are
+shows age, so time moves forward from right to left. The DO events are
 indicated by the grey shaded regions.
 
 \begin{figure}
