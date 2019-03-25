@@ -160,14 +160,13 @@ data, just by applying a learning algorithm. An in depth explanation of how NNs
 can be applied to find $F$ for spatio-temporal datasets is given in
 Chapter~\ref{cha:neural_networks}.  Before 1980, time series were typically
 predicted by using autoregressive, moving-average models (ARMA), which where
-introduced by Box and Jenkins [\cite{boxjenkins}].  Another method published in
-1960 by Winters on forecasting sales improved Holt`s double exponential
-smoothing.  His method later became known as the Holt-Winters method
-[\cite{winters1960forecasting}].  Both approaches are described in in the next
-paragraphs.  It should be noted though that they are both linear regression
-models, which makes them incapable of predicting non-linear time series. For
-the sake of simplicity they are described only for the case of scalar time
-series.\\
+introduced by [\cite{boxjenkins}].  Another method published by
+[\cite{winters1960forecasting}] on forecasting sales improved Holt`s double
+exponential smoothing.  This method later became known as the Holt-Winters
+method.  Both approaches are described in in the next paragraphs.  It should be
+noted though that they are both linear regression models, which makes them
+incapable of predicting non-linear time series. For the sake of simplicity they
+are described only for the case of scalar time series.\\
 
 During the regression (or training) phase of the forecasting algorithm the
 target for the prediction is typically the true observation of the next time
@@ -263,7 +262,7 @@ the future the prediction goes.
     sequence still takes on arbitrary values and can be converted into a
     probability of normality with an anomaly score (lower plot).
     The normality is calculated with sliding windows of length 100 for $\mu_E$
-    and a length of 5 for $m_e$.
+    and a length of 5 for $\mu_e$.
   }
   \label{fig:anomaly_score}
 \end{figure}
