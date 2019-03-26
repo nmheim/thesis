@@ -86,7 +86,7 @@ Given mean and covariance we can use the GP as a prior for the function $f$ of
 which we want to find the maximum. By choosing a zero mean, the only actual
 prior information is a smoothly operating $f$, implied by the Gaussian kernel.
 The interesting part is how to update this prior with information that is
-gained by evaluating $f$ a certain point to obtain a posterior.  Assuming that
+gained by evaluating $f$ at a certain point to obtain a posterior.  Assuming that
 we already have $n$ observations $\{\mathbf{x}_{1:n} ; f(\mathbf{x}_{1:n})\}$
 we can find the covariance matrix $\mathbf{K}$ with Eq.~\ref{eq:cov}.  To find
 the probability distribution of an unobserved point $\mathbf{x}_{n+1}$, the

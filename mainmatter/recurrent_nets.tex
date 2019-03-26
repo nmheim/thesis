@@ -107,7 +107,8 @@ one produces $N$ internal states.
 \begin{figure}
   \centering
   \RNNFlowChart
-  \caption{Basic RNN cell flow chart. [... make the interal state arrows thicker ...]}
+  \caption{Basic RNN cell flow chart. The recurrent weights are enclosed by the
+  non-linearity $\varphi$, the output weights by the function $\psi$.}
   \label{fig:rnn_flow_chart}
 \end{figure}
 
@@ -167,7 +168,7 @@ will be treated below.
 
 BPTT is an adapted form the of classic backpropagation algorithm of feedforward
 networks as described in Sec.~\ref{sec:feedforward_neural_networks} and was
-developed for the first time by Mozer~[\cite{mozerBPTT}].  The
+developed for the first time by~[\cite{mozerBPTT}].  The
 cyclic connections of RNNs prevent the direct application of the
 backpropagation algorithm.  One solution is to \emph{unroll} the network in
 time by stacking the network on top of itself for a certain number of time
@@ -221,12 +222,13 @@ and explodes if they are large.  It can be shown that it `[...] is
 \textit{sufficient} for the largest eigenvalue $\lambda_1$ of the recurrent
 weight matrix to be smaller than one for long term components to vanish (as $t
 \rightarrow \infty$) and \textit{necessary} for  it  to  be  larger  than  one
-for  gradients  to explode [\cite{razvan2012}]. By bounding the spectral radius
+for  gradients  to explode.' -- [\cite{razvan2012}].
+By bounding the spectral radius
 of the recurrent weights to be smaller than one, it is thus possible to avoid
 the exploding gradient problem. A solution to the vanishing gradient problem is
 more complicated and involves advanced network architectures such as the long
 short-term memory (LSTM) unit [\cite{lstm}].  It introduces additional input,
-forget and output layers, but the essential part is that the recurrent map of
+forget, and output layers, but the essential part is that one of the recurrent maps of
 the unit is the identity function.  The derivatives in Eq.~\ref{eq:dxtdxN}
 become one and the gradient can flow through many layers.  A completely
 different approach is to avoid training the recurrent weights altogether, which
@@ -245,7 +247,7 @@ or prevent convergence to a local minimum completely.  To understand what
 bifurcations are and how they affect RNN training, we will consider the
 recurrent part of a single unit RNN with the hyperbolic tangent as the
 activation function.  If the RNN has only one unit the state $\vt{x}$, as well
-as the weights and biases become a scalars:
+as the weights and biases become scalars:
 \begin{equation}
   \label{eq:single_unit_rnn}
   x_{t+1} = \tanh(w x_t + b).
@@ -296,8 +298,9 @@ happening here: the stable fixed point at $x=0$ becomes unstable (indicated by
 the dashed line) and two new stable fixed points above and below zero are
 created.
 
-A mathematical analysis of fixed points can be done by assuming that $x^*$ is a
-fixed point we can analyze Eq.~\ref{eq:single_unit_rnn}:
+Fixed points can be found analytically by rewriting
+Eq.~\ref{eq:single_unit_rnn} with the assumption that $x^*$ is a fixed point
+(for which $x_t = x_{t+1}$):
 \begin{equation}
   \label{eq:fp}
   x^* = \tanh(wx^* +b).
@@ -305,8 +308,8 @@ fixed point we can analyze Eq.~\ref{eq:single_unit_rnn}:
 Solving once for $w$ and once for $b$ results in two equations for fixed
 points:
 \begin{align}
-  b &= \tanh^{-1}(x) - wx\\
-  w &= \frac{\tanh^{-1}(x) - b}{x},
+  b &= \tanh^{-1}(x^*) - wx^*\\
+  w &= \frac{\tanh^{-1}(x^*) - b}{x^*},
 \end{align}
 which can be plotted for different values of $w$ and $b$
 (Fig.~\ref{fig:fixed_points}).  The period-2 cycles cannot be found by
@@ -314,7 +317,8 @@ analysing Eq.~\ref{eq:fp}.  Instead they can be found analytically by solving
 \begin{equation}
   x^* = \tanh^2(wx^* + b),
 \end{equation}
-but also by an intuitive, graphical approach called \emph{cobwebbing} (Fig.~\ref{fig:cobweb}).
+but also by an intuitive, graphical approach called \emph{cobwebbing}
+(Fig.~\ref{fig:cobweb}).
 Starting from an initial point $x_0$ a vertical line is drawn to the value of
 the activation function. Now drawing a horizontal line until we intersect with
 the graph of $y = x$ gives the new input $x_1$ and so forth.
@@ -337,7 +341,8 @@ towards infinite values as the GD algorithm tries to approach the target value
 of $x = - 0.25$.  Similar examples can be constructed in which parameters
 oscillate between two bifurcation points.
 
-The weights of RNNs are normally initialized to very small values which results
+The weights of RNNs that are used in practice are normally initialized to very
+small values which results
 in few fixed points. As the network learns some of the weights increase which
 drives the RNN through bifurcations.  The discontinuities that result in very
 large gradients cause large jumps of the GD algorithm which can nullify the

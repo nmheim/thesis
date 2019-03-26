@@ -202,7 +202,7 @@ scalar input in form of a simple step function.
 
 For a small $\rho=0.5$ and large $\kappa=0.1$, the state $x$ is dominated by
 the input, which is visualized in Fig.~\ref{fig:esn_states_input} B.  The state
-activations quickly approach certain value and form a plateau after just three
+activations quickly approach a certain value and form a plateau after just three
 to four time steps. When such a plateau is reached in all state activations,
 the network cannot determine the current position in the time series any more
 and will loose its predictive power.  In plot C the network is set up with
@@ -256,7 +256,7 @@ output matrix $\wmatr{out}$ can extract from an ESN state which was created by
 feeding it a random sequence.  A random sequence in this context means a series
 of numbers that were drawn from a uniform distribution. How to practically measure
 MC is shown in Sec.~\ref{sec:short_term_memory}. Essentially the value of the MC
-give a measure of how many input steps the ESN can encode in its internal state.
+gives a measure of how many input steps the ESN can encode in its internal state.
 
 For the case of a non-linear activation function in the recurrency of the ESN
 the MC has an upper bound:
@@ -290,7 +290,7 @@ is out of the scope of this work.
 
 To train an ESN any of the previously introduced methods for training RNNs can
 be used. The fact that only the last layer is trained makes an additional, much
-faster least squared method possible.  In the case of a linear output layer,
+faster least squares method possible.  In the case of a linear output layer,
 the predictions of the network can be written as
 \begin{equation}
   \vt{y} = \wmatr{out} \vt{x},
