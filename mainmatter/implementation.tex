@@ -109,7 +109,7 @@ the ESN and make predictions. And third, the visualization of the results.  If
 an online learning model (powered by GD algorithms) is run, then the execution
 and visualization phases can also be unified.
 
-Once the graph is constructed it is, almost trivial to pick out the operations
+Once the graph is constructed it is easy to pick out the operations
 that are desired and evaluate them using Tensorflow primitives. As the
 execution and visualization phases of the algorithm are rather straight forward
 and can be examined more closely in the examples of the \ttt{torsk} repo, the
@@ -279,7 +279,7 @@ routine can be used. It unrolls the ESN based on a decoder object, which in
 turn needs a helper to define the next inputs and the state of the ESN.
 Unfortunately, the \ttt{dynamic\_decode} function only returns, apart from
 the prediction, the final state of the ESN and none of the intermediate states.
-This is a major inconvenience for ESN validation, which is why the custom ESN
+This is a major inconvenience for ESN debugging, which is why the custom ESN
 cells (Sec.~\ref{sec:echo_state_network_cell}) return the state variable twice.
 This way they are treated like outputs, collected at every step, and
 returned together with the cell outputs in the end.  Unfortunately, the
@@ -298,7 +298,7 @@ only the current prediction $\vt{y}$ is picked as the next input.
 Unfortunately, the extraction of all the intermediate states from the decoder
 involves changing the return statement of the ESN cells, which breaks them for
 the usage with \ttt{tf.nn.dynamic\_rnn}. To fix this, Tensorflow's decoder
-features are used as encodeers by defining another dynamic decoding helper to
+features are used as encoders by defining another dynamic decoding helper to
 return inputs instead of predictions.  The few minor changes that have to be
 made to the helper can be found in the repository [\cite{coderepo}].
 
